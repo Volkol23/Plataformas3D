@@ -61,9 +61,9 @@ public class Input_Manager : MonoBehaviour
         leftAxisValue = context.ReadValue<Vector2>();
 
         //Magnitud Velocidad max y min
-        Debug.Log("Magnitude: " + leftAxisValue.magnitude);
+        //Debug.Log("Magnitude: " + leftAxisValue.magnitude);
         //Direción de el movimiento
-        Debug.Log("Normalized: " + leftAxisValue.normalized);
+        //Debug.Log("Normalized: " + leftAxisValue.normalized);
     }
 
     //Check Right Axis input values
@@ -72,9 +72,9 @@ public class Input_Manager : MonoBehaviour
         rightAxisValue = context.ReadValue<Vector2>();
 
         //Magnitud Velocidad max y min
-        Debug.Log("Magnitude: " + rightAxisValue.magnitude);
+        //Debug.Log("Magnitude: " + rightAxisValue.magnitude);
         //Direción de el movimiento
-        Debug.Log("Normalized: " + rightAxisValue.normalized);
+        //Debug.Log("Normalized: " + rightAxisValue.normalized);
     }
 
     //Check if Reset Button is Pressed
@@ -90,7 +90,7 @@ public class Input_Manager : MonoBehaviour
     }
 
     //Geters of the values of the inputs 
-    public bool GetSouthButtonPressed()
+    public bool GetJumpButtonPressed()
     {
         return timeSinceJumpPressed == 0f;
     }

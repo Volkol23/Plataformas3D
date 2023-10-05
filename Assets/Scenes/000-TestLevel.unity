@@ -720,7 +720,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 039c3edb9350bc74281f421760a9c858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 0
-  speed: 2
-  acceleration: 0
-  gravity: 0
+  maxSpeed: 10
+  speed: 0
+  acceleration: 5
+  deacceleration: 20
+  gravity: 20
+  jumpForce: 10
