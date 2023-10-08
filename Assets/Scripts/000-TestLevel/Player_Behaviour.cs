@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Toolbars;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
@@ -17,12 +18,17 @@ public class Player_Behaviour : MonoBehaviour
     [SerializeField] private float jumpForce;
     [SerializeField] private float doubleJumpForce;
     [SerializeField] private float tripleJumpForce;
+    [SerializeField] private float maxTimeJump;
 
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 direction = Vector3.zero;
     private float accelerationIncrease;
 
     private float jumpTimer;
+    private float doubleJumpTimer;
+
+    private bool jump;
+    private bool doubleJump;
 
     //Components of the gameObject
     private CharacterController characterController;
@@ -61,6 +67,7 @@ public class Player_Behaviour : MonoBehaviour
             speed -= deacceleration * Time.deltaTime;
         }
         
+        //Handle max and min speed
         if(speed > maxSpeed)
         {
             speed = maxSpeed;
@@ -85,7 +92,25 @@ public class Player_Behaviour : MonoBehaviour
         {
             if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
             {
-                finalVelocity.y = jumpForce;
+                if (doubleJumpTimer > 0.1f && doubleJump == true)
+                {
+                    //TripleJump
+                    finalVelocity.y = tripleJumpForce;
+                }
+                else if (jumpTimer > 0.1f && jump == true)
+                {
+                    //Double Jump
+                    finalVelocity.y = doubleJumpForce;
+                    doubleJump = true;
+                    doubleJumpTimer = maxTimeJump;
+                }
+                else
+                {
+                    //Normal Jump
+                    jump = true;
+                    jumpTimer = maxTimeJump;
+                    finalVelocity.y = jumpForce;
+                }
             }
             else
             {
@@ -95,6 +120,24 @@ public class Player_Behaviour : MonoBehaviour
         else
         {
             finalVelocity.y += direction.y * gravity * Time.deltaTime;
+        }
+
+        //Handle Jump Timers
+        if (jump)
+        {
+            jumpTimer -= Time.deltaTime;
+        }
+        if (doubleJump)
+        {
+            doubleJumpTimer -= Time.deltaTime;
+        }
+        if(jumpTimer < 0f)
+        {
+            jump = false;
+        }
+        if (doubleJumpTimer < 0f)
+        {
+            doubleJump = false;
         }
     }
 }

@@ -725,4 +725,11 @@ MonoBehaviour:
   acceleration: 5
   deacceleration: 20
   gravity: 20
-  jumpForce: 10
+  jumpForce: 5
+  doubleJumpForce: 7
+  tripleJumpForce: 15
+  jump: 0
+  doubleJump: 0
+  maxTimeJump: 1.5
+  jumpTimer: 0
+  doubleJumpTimer: 0
