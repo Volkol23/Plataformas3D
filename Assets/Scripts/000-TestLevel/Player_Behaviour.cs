@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Toolbars;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class Player_Behaviour : MonoBehaviour
 {
     [Header("Movement Variables")]
     [SerializeField] private float maxSpeed;
+    [SerializeField] private float walkSpeed;
     [SerializeField] private float speed;
     [SerializeField] private float acceleration;
     [SerializeField] private float deacceleration;
+    [SerializeField] private bool isCrouching;
 
     [Header("Jump variables")]
     [SerializeField] private float gravity;
     [SerializeField] private float jumpForce;
     [SerializeField] private float doubleJumpForce;
     [SerializeField] private float tripleJumpForce;
+    [SerializeField] private float backJumpForce;
+    [SerializeField] private float backJumpSpeed;
     [SerializeField] private float maxTimeJump;
 
     private Vector3 finalVelocity = Vector3.zero;
@@ -29,6 +32,8 @@ public class Player_Behaviour : MonoBehaviour
 
     private bool jump;
     private bool doubleJump;
+    [SerializeField]
+    private bool backJump = false;
 
     //Components of the gameObject
     private CharacterController characterController;
@@ -48,9 +53,15 @@ public class Player_Behaviour : MonoBehaviour
 
     private void HandleInputs()
     {
+
         //Handle input values from the controller
         direction = Input_Manager._INPUT_MANAGER.GetMovement().x * transform.right + Input_Manager._INPUT_MANAGER.GetMovement().y * transform.forward;
         accelerationIncrease = Input_Manager._INPUT_MANAGER.GetMovement().magnitude;
+
+        if (Input_Manager._INPUT_MANAGER.GetCrouchButtonPressed())
+        {
+            isCrouching = !isCrouching;
+        }
 
         direction.Normalize();
     }
@@ -77,8 +88,22 @@ public class Player_Behaviour : MonoBehaviour
             speed = 0f;
         }
 
-        finalVelocity.x = direction.x * speed;
-        finalVelocity.z = direction.z * speed;
+        if (isCrouching)
+        {
+            speed = walkSpeed;
+        }
+
+        if (backJump)
+        {
+            finalVelocity.x = -transform.forward.x * backJumpSpeed;
+            finalVelocity.z = -transform.forward.z * backJumpSpeed;
+        } 
+        else
+        {
+            finalVelocity.x = direction.x * speed;
+            finalVelocity.z = direction.z * speed;
+        }
+
 
         characterController.Move(finalVelocity * Time.deltaTime);
     }
@@ -104,6 +129,12 @@ public class Player_Behaviour : MonoBehaviour
                     doubleJump = true;
                     doubleJumpTimer = maxTimeJump;
                 }
+                else if (isCrouching)
+                {
+                    //Back Jump
+                    backJump = true;
+                    finalVelocity.y = backJumpForce;
+                }
                 else
                 {
                     //Normal Jump
@@ -114,6 +145,7 @@ public class Player_Behaviour : MonoBehaviour
             }
             else
             {
+                //backJump = false;
                 finalVelocity.y = direction.y * gravity * Time.deltaTime;
             }
         }
