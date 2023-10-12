@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Death
+  - Bounce
+  - Coin
   layers:
   - Default
   - TransparentFX

@@ -23,8 +23,14 @@ public class Player_Behaviour : MonoBehaviour
     [SerializeField] private float backJumpSpeed;
     [SerializeField] private float maxTimeJump;
 
+    [Header("Interactions Variables")]
+    [SerializeField] private Vector3 bounceDirection;
+    [SerializeField] private float bounceForce;
+    [SerializeField] private int points = 0;
+
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 direction = Vector3.zero;
+    [SerializeField]
     private float accelerationIncrease;
 
     private float jumpTimer;
@@ -71,7 +77,7 @@ public class Player_Behaviour : MonoBehaviour
         //Movement behaviour with acceleration
         if(accelerationIncrease > 0f)
         {
-            speed += acceleration * accelerationIncrease * Time.deltaTime;
+            speed += acceleration * Time.deltaTime;
         } 
         else
         {
@@ -79,14 +85,7 @@ public class Player_Behaviour : MonoBehaviour
         }
         
         //Handle max and min speed
-        if(speed > maxSpeed)
-        {
-            speed = maxSpeed;
-        } 
-        else if(speed < 0f)
-        {
-            speed = 0f;
-        }
+        speed = Mathf.Clamp(speed, 0f, maxSpeed);
 
         if (isCrouching)
         {
@@ -170,6 +169,28 @@ public class Player_Behaviour : MonoBehaviour
         if (doubleJumpTimer < 0f)
         {
             doubleJump = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //Death Elements
+        if(other.CompareTag("Death"))
+        {
+            Destroy(gameObject);
+        }
+
+        //Bounce Elements
+        if (other.CompareTag("Bounce"))
+        {
+            finalVelocity = bounceDirection * bounceForce;
+        }
+
+        //Points Elements
+        if (other.CompareTag("Coin"))
+        {
+            Debug.Log("Coin Added");
+            points++;
         }
     }
 }
