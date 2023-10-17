@@ -30,6 +30,7 @@ public class Player_Behaviour : MonoBehaviour
 
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 direction = Vector3.zero;
+    private Vector3 lastDirection = Vector3.zero;
     [SerializeField]
     private float accelerationIncrease;
 
@@ -44,10 +45,14 @@ public class Player_Behaviour : MonoBehaviour
     //Components of the gameObject
     private CharacterController characterController;
 
+    //External objects
+    private Camera mainCamera;
+
     private void Awake()
     {
         //Initialize components
         characterController = GetComponent<CharacterController>();
+        mainCamera = Camera.main;
     }
 
     private void Update()
@@ -59,9 +64,14 @@ public class Player_Behaviour : MonoBehaviour
 
     private void HandleInputs()
     {
-
         //Handle input values from the controller
-        direction = Input_Manager._INPUT_MANAGER.GetMovement().x * transform.right + Input_Manager._INPUT_MANAGER.GetMovement().y * transform.forward;
+        if(Input_Manager._INPUT_MANAGER.GetMovement().magnitude != 0)
+        {
+            direction = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f)
+            * new Vector3(Input_Manager._INPUT_MANAGER.GetMovement().x, 0f, Input_Manager._INPUT_MANAGER.GetMovement().y);
+            lastDirection = direction;
+        }
+       
         accelerationIncrease = Input_Manager._INPUT_MANAGER.GetMovement().magnitude;
 
         if (Input_Manager._INPUT_MANAGER.GetCrouchButtonPressed())
@@ -70,20 +80,21 @@ public class Player_Behaviour : MonoBehaviour
         }
 
         direction.Normalize();
+        lastDirection.Normalize();
     }
 
     private void HandleMovement()
     {
         //Movement behaviour with acceleration
-        if(accelerationIncrease > 0f)
+        if (accelerationIncrease > 0f)
         {
             speed += acceleration * Time.deltaTime;
-        } 
-        else
+        }
+        else if (accelerationIncrease <= 0f)
         {
             speed -= deacceleration * Time.deltaTime;
         }
-        
+
         //Handle max and min speed
         speed = Mathf.Clamp(speed, 0f, maxSpeed);
 
@@ -96,14 +107,13 @@ public class Player_Behaviour : MonoBehaviour
         {
             finalVelocity.x = -transform.forward.x * backJumpSpeed;
             finalVelocity.z = -transform.forward.z * backJumpSpeed;
-        } 
+        }
         else
         {
-            finalVelocity.x = direction.x * speed;
-            finalVelocity.z = direction.z * speed;
+            finalVelocity.x = lastDirection.x * speed;
+            finalVelocity.z = lastDirection.z * speed;
         }
-
-
+        Debug.Log(finalVelocity);
         characterController.Move(finalVelocity * Time.deltaTime);
     }
 
@@ -162,7 +172,7 @@ public class Player_Behaviour : MonoBehaviour
         {
             doubleJumpTimer -= Time.deltaTime;
         }
-        if(jumpTimer < 0f)
+        if (jumpTimer < 0f)
         {
             jump = false;
         }
@@ -175,7 +185,7 @@ public class Player_Behaviour : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Death Elements
-        if(other.CompareTag("Death"))
+        if (other.CompareTag("Death"))
         {
             Destroy(gameObject);
         }

@@ -88,9 +88,9 @@ public class Input_Manager : MonoBehaviour
     //Check if Crouch Button is Pressed
     private void CrouchButtonPressed(InputAction.CallbackContext context)
     {
-        //timeSinceCrouchPressed = 0f;
-        crouchValue = context.ReadValue<bool>();
-        Debug.Log(crouchValue);
+        timeSinceCrouchPressed = 0f;
+        //crouchValue = context.ReadValue<bool>();
+        //Debug.Log(crouchValue);
     }
 
     //Geters of the values of the inputs 
