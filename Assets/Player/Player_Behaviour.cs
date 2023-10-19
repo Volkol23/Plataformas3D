@@ -31,7 +31,7 @@ public class Player_Behaviour : MonoBehaviour
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 direction = Vector3.zero;
     private Vector3 lastDirection = Vector3.zero;
-    [SerializeField]
+
     private float accelerationIncrease;
 
     private float jumpTimer;
@@ -39,11 +39,11 @@ public class Player_Behaviour : MonoBehaviour
 
     private bool jump;
     private bool doubleJump;
-    [SerializeField]
     private bool backJump = false;
 
     //Components of the gameObject
     private CharacterController characterController;
+    private Animator animator;
 
     //External objects
     private Camera mainCamera;
@@ -53,6 +53,7 @@ public class Player_Behaviour : MonoBehaviour
         //Initialize components
         characterController = GetComponent<CharacterController>();
         mainCamera = Camera.main;
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -60,6 +61,7 @@ public class Player_Behaviour : MonoBehaviour
         HandleInputs();
         HandleJump();
         HandleMovement();
+        HandleRotation();
     }
 
     private void HandleInputs()
@@ -113,7 +115,10 @@ public class Player_Behaviour : MonoBehaviour
             finalVelocity.x = lastDirection.x * speed;
             finalVelocity.z = lastDirection.z * speed;
         }
-        Debug.Log(finalVelocity);
+
+        //Animator Setup
+        animator.SetFloat("Velocity", GetCurrentSpeed());
+
         characterController.Move(finalVelocity * Time.deltaTime);
     }
 
@@ -129,11 +134,13 @@ public class Player_Behaviour : MonoBehaviour
                 if (doubleJumpTimer > 0.1f && doubleJump == true)
                 {
                     //TripleJump
+                    animator.SetTrigger("Triple Jump");
                     finalVelocity.y = tripleJumpForce;
                 }
                 else if (jumpTimer > 0.1f && jump == true)
                 {
                     //Double Jump
+                    animator.SetTrigger("Double Jump");
                     finalVelocity.y = doubleJumpForce;
                     doubleJump = true;
                     doubleJumpTimer = maxTimeJump;
@@ -147,6 +154,7 @@ public class Player_Behaviour : MonoBehaviour
                 else
                 {
                     //Normal Jump
+                    animator.SetTrigger("Jump");
                     jump = true;
                     jumpTimer = maxTimeJump;
                     finalVelocity.y = jumpForce;
@@ -182,6 +190,18 @@ public class Player_Behaviour : MonoBehaviour
         }
     }
 
+    private void HandleRotation()
+    {
+        float rotationAngle = Vector3.SignedAngle(mainCamera.transform.forward, transform.forward, Vector3.up);
+
+        transform.Rotate(Vector3.up * rotationAngle * Time.deltaTime);
+
+        Quaternion cameraRotation = mainCamera.transform.rotation;
+        cameraRotation.x = 0f;
+        cameraRotation.z = 0f;
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, cameraRotation, 0.1f);
+    }
     private void OnTriggerEnter(Collider other)
     {
         //Death Elements
@@ -202,5 +222,25 @@ public class Player_Behaviour : MonoBehaviour
             Debug.Log("Coin Added");
             points++;
         }
+    }
+
+    public float GetCurrentSpeed()
+    {
+        return speed;
+    }
+
+    public bool GetJump()
+    {
+        return jump;
+    }
+
+    public bool GetDoubleJump()
+    {
+        return jumpTimer > 0.1f && jump == true;
+    }
+
+    public bool GetTripleJump()
+    {
+        return doubleJumpTimer > 0.1f && doubleJump == true;
     }
 }
