@@ -61,7 +61,7 @@ Transform:
   m_Children:
   - {fileID: 8195668228555195367}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8518107524648510476
 PrefabInstance:
@@ -119,6 +119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
       propertyPath: m_Controller
       value: 
@@ -173,11 +177,11 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 4.8
+  m_Height: 4
   m_Radius: 0.9
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.5
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 2.55, z: 0}
 --- !u!114 &4525786994392760597

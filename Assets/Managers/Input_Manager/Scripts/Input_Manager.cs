@@ -16,7 +16,7 @@ public class Input_Manager : MonoBehaviour
     private Vector2 rightAxisValue = Vector2.zero;
 
     private bool resetValue = false;
-    private bool crouchValue = false;
+    private bool crouchValueHold = false;
 
     private void Awake()
     {
@@ -40,7 +40,8 @@ public class Input_Manager : MonoBehaviour
             playerInputs.Player.Jump.performed += JumpButtonPressed;
             playerInputs.Player.Rotate.performed += RightAxisUpdate;
             playerInputs.Player.Reset.performed += ResetButonPressed;
-            playerInputs.Player.Crouch.performed += CrouchButtonPressed;
+            playerInputs.Player.Crouch.performed += CrouchButtonHold;
+            playerInputs.Player.Crouch.canceled += CrouchButtonNotHold;
         }
     }
     void Update()
@@ -86,13 +87,17 @@ public class Input_Manager : MonoBehaviour
     }
 
     //Check if Crouch Button is Pressed
-    private void CrouchButtonPressed(InputAction.CallbackContext context)
+    private void CrouchButtonHold(InputAction.CallbackContext context)
     {
-        timeSinceCrouchPressed = 0f;
-        //crouchValue = context.ReadValue<bool>();
+        crouchValueHold = true;
         //Debug.Log(crouchValue);
     }
 
+    private void CrouchButtonNotHold(InputAction.CallbackContext context)
+    {
+        crouchValueHold = false;
+        //Debug.Log(crouchValue);
+    }
     //Geters of the values of the inputs 
     public bool GetJumpButtonPressed()
     {
@@ -116,6 +121,6 @@ public class Input_Manager : MonoBehaviour
 
     public bool GetCrouchButtonPressed()
     {
-        return crouchValue;
+        return crouchValueHold;
     }
 }

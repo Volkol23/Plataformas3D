@@ -41,6 +41,10 @@ public class Player_Behaviour : MonoBehaviour
     private bool doubleJump;
     private bool backJump = false;
 
+    //Wall Jump Variables
+    private bool wallJump;
+    private Vector3 wallNormal = Vector3.zero;
+
     //Components of the gameObject
     private CharacterController characterController;
     private Animator animator;
@@ -129,6 +133,7 @@ public class Player_Behaviour : MonoBehaviour
         //Jump behaviour with gravity
         if (characterController.isGrounded)
         {
+            wallJump = false;
             if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
             {
                 if (doubleJumpTimer > 0.1f && doubleJump == true)
@@ -163,12 +168,23 @@ public class Player_Behaviour : MonoBehaviour
             else
             {
                 //backJump = false;
-                finalVelocity.y = direction.y * gravity * Time.deltaTime;
+                finalVelocity.y = direction.y * gravity * Time.deltaTime; 
             }
         }
         else
         {
             finalVelocity.y += direction.y * gravity * Time.deltaTime;
+            if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
+            {
+                if (wallJump)
+                {
+                    //WallJump
+                    //animator.SetTrigger("Jump");
+                    direction = wallNormal;
+                    finalVelocity.y = jumpForce;
+                    wallJump = false;
+                }
+            }
         }
 
         //Handle Jump Timers
@@ -221,6 +237,16 @@ public class Player_Behaviour : MonoBehaviour
         {
             Debug.Log("Coin Added");
             points++;
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        //Wall Elements
+        if (!characterController.isGrounded && hit.gameObject.CompareTag("Wall"))
+        {
+            wallJump = true;
+            wallNormal = hit.normal;
         }
     }
 
