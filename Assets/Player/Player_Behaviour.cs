@@ -125,7 +125,7 @@ public class Player_Behaviour : MonoBehaviour
     private void HandleJump()
     {
         direction.y = -1f;
-
+        animator.SetBool("Grounded", characterController.isGrounded);
         //Jump behaviour with gravity
         if (characterController.isGrounded)
         {
