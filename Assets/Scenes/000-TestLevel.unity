@@ -2198,7 +2198,7 @@ GameObject:
   m_TagString: Bounce
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!65 &1257986942
 BoxCollider:
@@ -2279,7 +2279,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1257986941}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.09, y: 0.69, z: -3.5331485}
+  m_LocalPosition: {x: -18.09, y: 1.06, z: -3.5331485}
   m_LocalScale: {x: 5.6884, y: 1, z: 3.2756}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2902,6 +2902,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BatCappy
       objectReference: {fileID: 0}
+    - target: {fileID: 4266176866651142554, guid: 0fe51b99fe0a3244495663cbfd9183a6, type: 3}
+      propertyPath: m_TagString
+      value: Bat
+      objectReference: {fileID: 0}
     - target: {fileID: 6507274806051210588, guid: 0fe51b99fe0a3244495663cbfd9183a6, type: 3}
       propertyPath: m_RootOrder
       value: 31
@@ -2946,6 +2950,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7571360110952503490, guid: 0fe51b99fe0a3244495663cbfd9183a6, type: 3}
+      propertyPath: m_TagString
+      value: Bat
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2974,7 +2982,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3052,6 +3060,18 @@ PrefabInstance:
     - target: {fileID: 1932598427411441936, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
+      propertyPath: batCappy
+      value: 
+      objectReference: {fileID: 4266176866651142554, guid: 0fe51b99fe0a3244495663cbfd9183a6, type: 3}
+    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
+      propertyPath: batForce
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
+      propertyPath: rotationSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6220608366340483862, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
       propertyPath: m_RootOrder

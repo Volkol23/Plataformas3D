@@ -8,6 +8,7 @@ TagManager:
   - Bounce
   - Coin
   - Wall
+  - Bat
   layers:
   - Default
   - TransparentFX

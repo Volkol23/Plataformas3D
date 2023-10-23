@@ -13,6 +13,7 @@ public class Player_Behaviour : MonoBehaviour
     [SerializeField] private float acceleration;
     [SerializeField] private float deacceleration;
     [SerializeField] private bool isCrouching;
+    [SerializeField] private float rotationSpeed;
 
     [Header("Jump variables")]
     [SerializeField] private float gravity;
@@ -26,7 +27,9 @@ public class Player_Behaviour : MonoBehaviour
     [Header("Interactions Variables")]
     [SerializeField] private Vector3 bounceDirection;
     [SerializeField] private float bounceForce;
+    [SerializeField] private float batForce;
     [SerializeField] private int points = 0;
+    [SerializeField] private GameObject batCappy;
 
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 direction = Vector3.zero;
@@ -64,8 +67,8 @@ public class Player_Behaviour : MonoBehaviour
     {
         HandleInputs();
         HandleJump();
-        HandleMovement();
         HandleRotation();
+        HandleMovement();
     }
 
     private void HandleInputs()
@@ -85,6 +88,10 @@ public class Player_Behaviour : MonoBehaviour
             isCrouching = !isCrouching;
         }
 
+        if (Input_Manager._INPUT_MANAGER.GetBatButtonPressed())
+        {
+            SpawnBat();
+        }
         direction.Normalize();
         lastDirection.Normalize();
     }
@@ -167,7 +174,7 @@ public class Player_Behaviour : MonoBehaviour
             }
             else
             {
-                //backJump = false;
+                backJump = false;
                 finalVelocity.y = direction.y * gravity * Time.deltaTime; 
             }
         }
@@ -208,16 +215,27 @@ public class Player_Behaviour : MonoBehaviour
 
     private void HandleRotation()
     {
-        float rotationAngle = Vector3.SignedAngle(mainCamera.transform.forward, transform.forward, Vector3.up);
+        float rotation = Vector3.SignedAngle(direction, -transform.forward, Vector3.up);
+        if(direction != transform.forward)
+        {
+            
+            transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotationSpeed);
+        }
+        
 
-        transform.Rotate(Vector3.up * rotationAngle * Time.deltaTime);
+        //Quaternion cameraRotation = mainCamera.transform.rotation;
+        //cameraRotation.x = 0f;
+        //cameraRotation.z = 0f;
 
-        Quaternion cameraRotation = mainCamera.transform.rotation;
-        cameraRotation.x = 0f;
-        cameraRotation.z = 0f;
-
-        transform.rotation = Quaternion.Lerp(transform.rotation, cameraRotation, 0.1f);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, cameraRotation, 0.1f);
     }
+
+    private void SpawnBat()
+    {
+        Debug.Log("SapwnBat");
+        Instantiate(batCappy, transform.position, Quaternion.identity);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //Death Elements
@@ -237,6 +255,12 @@ public class Player_Behaviour : MonoBehaviour
         {
             Debug.Log("Coin Added");
             points++;
+        }
+
+        //Bat Cappy
+        if (other.CompareTag("Bat"))
+        {
+            finalVelocity = bounceDirection * bounceForce;
         }
     }
 
