@@ -77,7 +77,7 @@ public class Player_Behaviour : MonoBehaviour
 
     private void HandleInputs()
     {
-        //Handle input values from the controller
+        //Handle input values form the movement
         if(Input_Manager._INPUT_MANAGER.GetMovement().magnitude != 0)
         {
             direction = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f)
@@ -85,15 +85,25 @@ public class Player_Behaviour : MonoBehaviour
             lastDirection = direction;
         }
        
+        //
         accelerationIncrease = Input_Manager._INPUT_MANAGER.GetMovement().magnitude;
 
+        //Check if it is Crouching
         isCrouching = Input_Manager._INPUT_MANAGER.GetCrouchButtonPressed();
 
+        //Spawn Bat Cappy
         if (Input_Manager._INPUT_MANAGER.GetBatButtonPressed())
         {
             SpawnBat();
         }
 
+        //Reset Input Button
+        if (Input_Manager._INPUT_MANAGER.GetResetButtonPressed())
+        {
+            Game_Manager._GAME_MANAGER.ResetGame();
+        }
+
+        //Normaliza direction vectors
         direction.Normalize();
         lastDirection.Normalize();
     }
@@ -225,7 +235,7 @@ public class Player_Behaviour : MonoBehaviour
     {
         //Roatate character relative to the forward of the camera
         float rotation = Vector3.SignedAngle(direction, -transform.forward, transform.up);
-        //Debug.Log(rotation);
+
         if(direction != transform.forward)
         {
             transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotationSpeed);
@@ -234,9 +244,9 @@ public class Player_Behaviour : MonoBehaviour
 
     private void SpawnBat()
     {
+        //Check if its a bat in the scene
         GameObject[] bats = GameObject.FindGameObjectsWithTag("Bat");
 
-        //Debug.Log(bats.Length);
         if (bats.Length == 0)
         {
             Instantiate(batCappy, batSpawner.transform.position, Quaternion.identity).GetComponent<BatCappy>().GetPlayerDirection(transform.forward);

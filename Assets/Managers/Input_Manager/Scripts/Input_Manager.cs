@@ -17,7 +17,6 @@ public class Input_Manager : MonoBehaviour
 
     private bool resetValue = false;
     private bool batButton = false;
-    //private bool crouchValue = false;
 
     private void Awake()
     {
@@ -56,29 +55,18 @@ public class Input_Manager : MonoBehaviour
     private void JumpButtonPressed(InputAction.CallbackContext context)
     {
         timeSinceJumpPressed = 0f;
-        //Debug.Log("Jump Pressed");
     }
 
     //Check Left Axis input values
     private void LeftAxisUpdate(InputAction.CallbackContext context)
     {
         leftAxisValue = context.ReadValue<Vector2>();
-
-        //Magnitud Velocidad max y min
-        //Debug.Log("Magnitude: " + leftAxisValue.magnitude);
-        //Direción de el movimiento
-        //Debug.Log("Normalized: " + leftAxisValue.normalized);
     }
 
     //Check Right Axis input values
     private void RightAxisUpdate(InputAction.CallbackContext context)
     {
         rightAxisValue = context.ReadValue<Vector2>();
-
-        //Magnitud Velocidad max y min
-        //Debug.Log("Magnitude: " + rightAxisValue.magnitude);
-        //Direción de el movimiento
-        //Debug.Log("Normalized: " + rightAxisValue.normalized);
     }
 
     //Check if Reset Button is Pressed
@@ -90,9 +78,7 @@ public class Input_Manager : MonoBehaviour
     //Check if Crouch Button is Pressed
     private void CrouchButtonHold(InputAction.CallbackContext context)
     {
-        //crouchValue = !crouchValue;
         timeSinceCrouchPressed = 0f;
-        //Debug.Log(crouchValue);
     }
 
     //Check if Bat Button is Pressed
@@ -124,7 +110,6 @@ public class Input_Manager : MonoBehaviour
 
     public bool GetCrouchButtonPressed()
     {
-        //return crouchValue;
         return timeSinceCrouchPressed == 0f;
     }
 
