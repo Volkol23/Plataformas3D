@@ -8,9 +8,6 @@ public class BatCappy : MonoBehaviour
     private float angleRotation;
 
     [SerializeField]
-    private float distance;
-
-    [SerializeField]
     private float speed;
 
     [SerializeField]
@@ -20,14 +17,17 @@ public class BatCappy : MonoBehaviour
     private bool collisionActive = false;
 
     private float currentiTime = 0f;
+    private BoxCollider boxCollider;
 
     private void Awake()
     {
         currentiTime = 0f;
+        boxCollider = GetComponent<BoxCollider>();
     }
 
     void Update()
     {
+        boxCollider.enabled = collisionActive;
         currentiTime += Time.deltaTime;
         if(currentiTime < timeMoving)
         {
