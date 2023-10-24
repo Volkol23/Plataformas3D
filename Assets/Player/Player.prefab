@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 6220608366340483862}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,7 +61,38 @@ Transform:
   m_Children:
   - {fileID: 8195668228555195367}
   m_Father: {fileID: 0}
-  m_RootOrder: 29
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2021515874380696424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7546974098671710294}
+  m_Layer: 0
+  m_Name: BatSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7546974098671710294
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021515874380696424}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8195668228555195367}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8518107524648510476
 PrefabInstance:
@@ -137,6 +168,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6085112451563442106}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7546974098671710294}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
       insertIndex: -1
@@ -202,16 +236,19 @@ MonoBehaviour:
   acceleration: 5
   deacceleration: 10
   isCrouching: 0
+  rotationSpeed: 10
   gravity: 20
-  jumpForce: 15
-  doubleJumpForce: 20
-  tripleJumpForce: 30
+  jumpForce: 10
+  doubleJumpForce: 13
+  tripleJumpForce: 20
   backJumpForce: 20
   backJumpSpeed: 7
   maxTimeJump: 2.5
   bounceDirection: {x: 0, y: 1, z: 0}
   bounceForce: 20
-  points: 0
+  batForce: 30
+  batCappy: {fileID: 4266176866651142554, guid: 0fe51b99fe0a3244495663cbfd9183a6, type: 3}
+  batSpawner: {fileID: 2021515874380696424}
 --- !u!114 &4381544025470208873
 MonoBehaviour:
   m_ObjectHideFlags: 0

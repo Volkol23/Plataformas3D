@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -28,15 +29,17 @@ public class Player_Behaviour : MonoBehaviour
     [SerializeField] private Vector3 bounceDirection;
     [SerializeField] private float bounceForce;
     [SerializeField] private float batForce;
-    [SerializeField] private int points = 0;
     [SerializeField] private GameObject batCappy;
+    [SerializeField] private GameObject batSpawner;
 
+    //Movement Variables
     private Vector3 finalVelocity = Vector3.zero;
     private Vector3 direction = Vector3.zero;
     private Vector3 lastDirection = Vector3.zero;
 
     private float accelerationIncrease;
 
+    //Jump variables
     private float jumpTimer;
     private float doubleJumpTimer;
 
@@ -59,6 +62,7 @@ public class Player_Behaviour : MonoBehaviour
     {
         //Initialize components
         characterController = GetComponent<CharacterController>();
+        direction = transform.forward;
         mainCamera = Camera.main;
         animator = GetComponent<Animator>();
     }
@@ -83,15 +87,13 @@ public class Player_Behaviour : MonoBehaviour
        
         accelerationIncrease = Input_Manager._INPUT_MANAGER.GetMovement().magnitude;
 
-        if (Input_Manager._INPUT_MANAGER.GetCrouchButtonPressed())
-        {
-            isCrouching = !isCrouching;
-        }
+        isCrouching = Input_Manager._INPUT_MANAGER.GetCrouchButtonPressed();
 
         if (Input_Manager._INPUT_MANAGER.GetBatButtonPressed())
         {
             SpawnBat();
         }
+
         direction.Normalize();
         lastDirection.Normalize();
     }
@@ -130,17 +132,22 @@ public class Player_Behaviour : MonoBehaviour
         //Animator Setup
         animator.SetFloat("Velocity", GetCurrentSpeed());
 
+        //Move character controller
         characterController.Move(finalVelocity * Time.deltaTime);
     }
 
     private void HandleJump()
     {
+        //Applt gravity direction
         direction.y = -1f;
+
         animator.SetBool("Grounded", characterController.isGrounded);
+
         //Jump behaviour with gravity
         if (characterController.isGrounded)
         {
             wallJump = false;
+
             if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
             {
                 if (doubleJumpTimer > 0.1f && doubleJump == true)
@@ -161,6 +168,7 @@ public class Player_Behaviour : MonoBehaviour
                 {
                     //Back Jump
                     backJump = true;
+                    isCrouching = false;
                     finalVelocity.y = backJumpForce;
                 }
                 else
@@ -215,25 +223,24 @@ public class Player_Behaviour : MonoBehaviour
 
     private void HandleRotation()
     {
-        float rotation = Vector3.SignedAngle(direction, -transform.forward, Vector3.up);
+        //Roatate character relative to the forward of the camera
+        float rotation = Vector3.SignedAngle(direction, -transform.forward, transform.up);
+        //Debug.Log(rotation);
         if(direction != transform.forward)
         {
-            
             transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotationSpeed);
         }
-        
-
-        //Quaternion cameraRotation = mainCamera.transform.rotation;
-        //cameraRotation.x = 0f;
-        //cameraRotation.z = 0f;
-
-        //transform.rotation = Quaternion.Lerp(transform.rotation, cameraRotation, 0.1f);
     }
 
     private void SpawnBat()
     {
-        Debug.Log("SapwnBat");
-        Instantiate(batCappy, transform.position, Quaternion.identity);
+        GameObject[] bats = GameObject.FindGameObjectsWithTag("Bat");
+
+        //Debug.Log(bats.Length);
+        if (bats.Length == 0)
+        {
+            Instantiate(batCappy, batSpawner.transform.position, Quaternion.identity).GetComponent<BatCappy>().GetPlayerDirection(transform.forward);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -241,7 +248,7 @@ public class Player_Behaviour : MonoBehaviour
         //Death Elements
         if (other.CompareTag("Death"))
         {
-            Destroy(gameObject);
+            Game_Manager._GAME_MANAGER.ResetGame();
         }
 
         //Bounce Elements
@@ -253,8 +260,7 @@ public class Player_Behaviour : MonoBehaviour
         //Points Elements
         if (other.CompareTag("Coin"))
         {
-            Debug.Log("Coin Added");
-            points++;
+            Game_Manager._GAME_MANAGER.UpdatePoints();
         }
 
         //Bat Cappy
@@ -274,6 +280,7 @@ public class Player_Behaviour : MonoBehaviour
         }
     }
 
+    //Geters for Animator Manager
     public float GetCurrentSpeed()
     {
         return speed;

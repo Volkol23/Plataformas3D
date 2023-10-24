@@ -17,7 +17,7 @@ public class Input_Manager : MonoBehaviour
 
     private bool resetValue = false;
     private bool batButton = false;
-    private bool crouchValueHold = false;
+    //private bool crouchValue = false;
 
     private void Awake()
     {
@@ -40,9 +40,8 @@ public class Input_Manager : MonoBehaviour
             playerInputs.Player.Move.performed += LeftAxisUpdate;
             playerInputs.Player.Jump.performed += JumpButtonPressed;
             playerInputs.Player.Rotate.performed += RightAxisUpdate;
-            playerInputs.Player.Reset.performed += ResetButonPressed;
-            playerInputs.Player.Crouch.started += CrouchButtonHold;
-            playerInputs.Player.Crouch.canceled += CrouchButtonNotHold;
+            playerInputs.Player.Reset.performed += ResetButtonPressed;
+            playerInputs.Player.Crouch.performed += CrouchButtonHold;
             playerInputs.Player.Bat.performed += BatButtonPressed;
         }
     }
@@ -57,7 +56,7 @@ public class Input_Manager : MonoBehaviour
     private void JumpButtonPressed(InputAction.CallbackContext context)
     {
         timeSinceJumpPressed = 0f;
-        Debug.Log("Jump Pressed");
+        //Debug.Log("Jump Pressed");
     }
 
     //Check Left Axis input values
@@ -83,28 +82,25 @@ public class Input_Manager : MonoBehaviour
     }
 
     //Check if Reset Button is Pressed
-    private void ResetButonPressed(InputAction.CallbackContext context)
+    private void ResetButtonPressed(InputAction.CallbackContext context)
     {
-        resetValue = context.performed;
+        resetValue = !resetValue;
     }
 
     //Check if Crouch Button is Pressed
     private void CrouchButtonHold(InputAction.CallbackContext context)
     {
-        crouchValueHold = true;
+        //crouchValue = !crouchValue;
+        timeSinceCrouchPressed = 0f;
         //Debug.Log(crouchValue);
     }
 
-    private void CrouchButtonNotHold(InputAction.CallbackContext context)
-    {
-        crouchValueHold = false;
-        //Debug.Log(crouchValue);
-    }
-
+    //Check if Bat Button is Pressed
     private void BatButtonPressed(InputAction.CallbackContext context)
     {
-        batButton = context.performed;
+        batButton = !batButton;
     }
+
     //Geters of the values of the inputs 
     public bool GetJumpButtonPressed()
     {
@@ -128,7 +124,8 @@ public class Input_Manager : MonoBehaviour
 
     public bool GetCrouchButtonPressed()
     {
-        return crouchValueHold;
+        //return crouchValue;
+        return timeSinceCrouchPressed == 0f;
     }
 
     public bool GetBatButtonPressed()

@@ -4,39 +4,55 @@ using UnityEngine;
 
 public class BatCappy : MonoBehaviour
 {
-    [SerializeField]
-    private float angleRotation;
+    [Header("Bat variables")]
+    [SerializeField] private float angleRotation;
+    [SerializeField] private float speed;
+    [SerializeField] private float timeMoving;
 
-    [SerializeField]
-    private float speed;
-
-    [SerializeField]
-    private float timeMoving;
-
-    [SerializeField]
-    private bool collisionActive = false;
-
-    private float currentiTime = 0f;
+    private bool collisionActive;
+    private float currentTime;
+    private Vector3 direction;
     private BoxCollider boxCollider;
 
     private void Awake()
     {
-        currentiTime = 0f;
+        collisionActive = false;
+        currentTime = 0f;
         boxCollider = GetComponent<BoxCollider>();
     }
 
     void Update()
     {
         boxCollider.enabled = collisionActive;
-        currentiTime += Time.deltaTime;
-        if(currentiTime < timeMoving)
+        currentTime += Time.deltaTime;
+
+        if(currentTime < timeMoving)
         {
-            transform.position += transform.forward * speed * Time.deltaTime;
+            //Move BatCappy forward
+            if(direction != null)
+            {
+                transform.position += direction * speed * Time.deltaTime;
+            }
         }
         else
         {
+            //Enable BatCappy Behaviour
             transform.Rotate(Vector3.up, angleRotation);
             collisionActive = true;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //Interaction with the player
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void GetPlayerDirection(Vector3 playerDirection)
+    {
+        direction = playerDirection;
     }
 }
