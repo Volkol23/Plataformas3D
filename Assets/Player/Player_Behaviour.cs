@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -31,6 +30,7 @@ public class Player_Behaviour : MonoBehaviour
     [SerializeField] private float batForce;
     [SerializeField] private GameObject batCappy;
     [SerializeField] private GameObject batSpawner;
+    [SerializeField] private AudioClip[] achieveAudios;
 
     //Movement Variables
     private Vector3 finalVelocity = Vector3.zero;
@@ -54,6 +54,7 @@ public class Player_Behaviour : MonoBehaviour
     //Components of the gameObject
     private CharacterController characterController;
     private Animator animator;
+    private AudioSource audioSource;
 
     //External objects
     private Camera mainCamera;
@@ -65,6 +66,7 @@ public class Player_Behaviour : MonoBehaviour
         direction = transform.forward;
         mainCamera = Camera.main;
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -270,6 +272,7 @@ public class Player_Behaviour : MonoBehaviour
         //Points Elements
         if (other.CompareTag("Coin"))
         {
+            AchievePoint();
             Game_Manager._GAME_MANAGER.UpdatePoints();
         }
 
@@ -280,6 +283,12 @@ public class Player_Behaviour : MonoBehaviour
         }
     }
 
+    private void AchievePoint()
+    {
+        int index = Random.Range(0, 4);
+        audioSource.clip = achieveAudios[index];
+        audioSource.Play();
+    }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         //Wall Elements
