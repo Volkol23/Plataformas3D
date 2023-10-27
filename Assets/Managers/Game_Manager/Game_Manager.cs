@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,7 @@ public class Game_Manager : MonoBehaviour
     public static Game_Manager _GAME_MANAGER;
 
     private int points;
+    private int totalPoints;
     private void Awake()
     {
         if(_GAME_MANAGER != null && _GAME_MANAGER != this)
@@ -21,6 +23,7 @@ public class Game_Manager : MonoBehaviour
             DontDestroyOnLoad(_GAME_MANAGER);
 
             points = 0;
+            AllPoints();
         }
     }
 
@@ -39,5 +42,16 @@ public class Game_Manager : MonoBehaviour
     public int GetPoints()
     {
         return points;
+    }
+
+    private void AllPoints()
+    {
+        GameObject[] points = GameObject.FindGameObjectsWithTag("Coin");
+        totalPoints = points.Length;
+    }
+
+    public bool WinGame()
+    {
+        return points == totalPoints && totalPoints > 0;
     }
 }

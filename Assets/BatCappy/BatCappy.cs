@@ -8,6 +8,7 @@ public class BatCappy : MonoBehaviour
     [SerializeField] private float angleRotation;
     [SerializeField] private float speed;
     [SerializeField] private float timeMoving;
+    [SerializeField] private float lifeTime;
 
     private bool collisionActive;
     private float currentTime;
@@ -39,6 +40,11 @@ public class BatCappy : MonoBehaviour
             //Enable BatCappy Behaviour
             transform.Rotate(Vector3.up, angleRotation);
             collisionActive = true;
+        }
+
+        if (currentTime > lifeTime)
+        {
+            Destroy(gameObject);
         }
     }
 

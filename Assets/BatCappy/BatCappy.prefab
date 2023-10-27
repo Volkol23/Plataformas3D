@@ -70,6 +70,7 @@ MonoBehaviour:
   angleRotation: 1
   speed: 15
   timeMoving: 1
+  lifeTime: 10
 --- !u!1001 &7337408561295648147
 PrefabInstance:
   m_ObjectHideFlags: 0

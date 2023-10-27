@@ -14,6 +14,7 @@ public class Player_Behaviour : MonoBehaviour
     [SerializeField] private float deacceleration;
     [SerializeField] private bool isCrouching;
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private float rotationThreshold;
 
     [Header("Jump variables")]
     [SerializeField] private float gravity;
@@ -72,8 +73,8 @@ public class Player_Behaviour : MonoBehaviour
     private void Update()
     {
         HandleInputs();
-        HandleJump();
         HandleRotation();
+        HandleJump();
         HandleMovement();
     }
 
@@ -87,7 +88,6 @@ public class Player_Behaviour : MonoBehaviour
             lastDirection = direction;
         }
        
-        //
         accelerationIncrease = Input_Manager._INPUT_MANAGER.GetMovement().magnitude;
 
         //Check if it is Crouching
@@ -134,6 +134,17 @@ public class Player_Behaviour : MonoBehaviour
         {
             finalVelocity.x = -transform.forward.x * backJumpSpeed;
             finalVelocity.z = -transform.forward.z * backJumpSpeed;
+        }
+        else if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
+        {
+            if (wallJump)
+            {
+                //WallJump
+                //animator.SetTrigger("Jump");
+                direction = wallNormal.normalized;
+                finalVelocity.y = jumpForce;
+                wallJump = false;
+            }
         }
         else
         {
@@ -201,17 +212,6 @@ public class Player_Behaviour : MonoBehaviour
         else
         {
             finalVelocity.y += direction.y * gravity * Time.deltaTime;
-            if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
-            {
-                if (wallJump)
-                {
-                    //WallJump
-                    //animator.SetTrigger("Jump");
-                    direction = wallNormal;
-                    finalVelocity.y = jumpForce;
-                    wallJump = false;
-                }
-            }
         }
 
         //Handle Jump Timers
@@ -237,10 +237,10 @@ public class Player_Behaviour : MonoBehaviour
     {
         //Roatate character relative to the forward of the camera
         float rotation = Vector3.SignedAngle(direction, -transform.forward, transform.up);
-
-        if(direction != transform.forward)
+        Debug.Log(rotation);
+        if(direction != transform.forward /*&& rotation > rotationThreshold*/)
         {
-            transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotationSpeed);
+            transform.Rotate(Vector3.up * rotation * Time.deltaTime);
         }
     }
 
