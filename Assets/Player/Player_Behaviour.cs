@@ -24,6 +24,8 @@ public class Player_Behaviour : MonoBehaviour
     [SerializeField] private float backJumpForce;
     [SerializeField] private float backJumpSpeed;
     [SerializeField] private float maxTimeJump;
+    [SerializeField] private float wallSpeed;
+    [SerializeField] private float maxWallJumpTime;
 
     [Header("Interactions Variables")]
     [SerializeField] private Vector3 bounceDirection;
@@ -43,7 +45,7 @@ public class Player_Behaviour : MonoBehaviour
     //Jump variables
     private float jumpTimer;
     private float doubleJumpTimer;
-
+    private float wallJumpTimer;
     private bool jump;
     private bool doubleJump;
     private bool backJump = false;
@@ -60,9 +62,15 @@ public class Player_Behaviour : MonoBehaviour
     //External objects
     private Camera mainCamera;
 
+    //Debug Objects
+    private GameObject wall;
+
+    //Variable terrorista
+    private bool updateInputs = true;
+
     private void Awake()
     {
-        //Initialize components
+        //Initialize components and variables
         characterController = GetComponent<CharacterController>();
         direction = transform.forward;
         mainCamera = Camera.main;
@@ -74,40 +82,41 @@ public class Player_Behaviour : MonoBehaviour
     {
         HandleInputs();
         HandleRotation();
-        HandleJump();
         HandleMovement();
     }
 
     private void HandleInputs()
     {
-        //Handle input values form the movement
-        if(Input_Manager._INPUT_MANAGER.GetMovement().magnitude != 0)
+        if (updateInputs) //Terrorist Act
         {
-            direction = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f)
-            * new Vector3(Input_Manager._INPUT_MANAGER.GetMovement().x, 0f, Input_Manager._INPUT_MANAGER.GetMovement().y);
-            lastDirection = direction;
+            //Handle input values form the movement
+            if (Input_Manager._INPUT_MANAGER.GetMovement().magnitude != 0)
+            {
+                direction = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f)
+                * new Vector3(Input_Manager._INPUT_MANAGER.GetMovement().x, 0f, Input_Manager._INPUT_MANAGER.GetMovement().y);
+                lastDirection = direction;
+            }
+            accelerationIncrease = Input_Manager._INPUT_MANAGER.GetMovement().magnitude;
+
+            //Check if it is Crouching
+            isCrouching = Input_Manager._INPUT_MANAGER.GetCrouchButtonPressed();
+
+            //Spawn Bat Cappy
+            if (Input_Manager._INPUT_MANAGER.GetBatButtonPressed())
+            {
+                SpawnBat();
+            }
+
+            //Reset Input Button
+            if (Input_Manager._INPUT_MANAGER.GetResetButtonPressed())
+            {
+                Game_Manager._GAME_MANAGER.ResetGame();
+            }
+
+            //Normaliza direction vectors
+            direction.Normalize();
+            lastDirection.Normalize();
         }
-       
-        accelerationIncrease = Input_Manager._INPUT_MANAGER.GetMovement().magnitude;
-
-        //Check if it is Crouching
-        isCrouching = Input_Manager._INPUT_MANAGER.GetCrouchButtonPressed();
-
-        //Spawn Bat Cappy
-        if (Input_Manager._INPUT_MANAGER.GetBatButtonPressed())
-        {
-            SpawnBat();
-        }
-
-        //Reset Input Button
-        if (Input_Manager._INPUT_MANAGER.GetResetButtonPressed())
-        {
-            Game_Manager._GAME_MANAGER.ResetGame();
-        }
-
-        //Normaliza direction vectors
-        direction.Normalize();
-        lastDirection.Normalize();
     }
 
     private void HandleMovement()
@@ -122,29 +131,26 @@ public class Player_Behaviour : MonoBehaviour
             speed -= deacceleration * Time.deltaTime;
         }
 
-        //Handle max and min speed
-        speed = Mathf.Clamp(speed, 0f, maxSpeed);
-
-        if (isCrouching)
+        //Assign velocity while crouching
+        if (isCrouching && accelerationIncrease > 0f)
         {
             speed = walkSpeed;
         }
+        else if (accelerationIncrease <= 0f)
+        {
+            speed -= deacceleration * Time.deltaTime;
+        }
 
+        //Handle max and min speed
+        speed = Mathf.Clamp(speed, 0f, maxSpeed);
+
+        HandleJump();
+
+        //Velicity + direction  while backJump, wallJump and the other circumstances
         if (backJump)
         {
             finalVelocity.x = -transform.forward.x * backJumpSpeed;
             finalVelocity.z = -transform.forward.z * backJumpSpeed;
-        }
-        else if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
-        {
-            if (wallJump)
-            {
-                //WallJump
-                //animator.SetTrigger("Jump");
-                direction = wallNormal.normalized;
-                finalVelocity.y = jumpForce;
-                wallJump = false;
-            }
         }
         else
         {
@@ -154,6 +160,7 @@ public class Player_Behaviour : MonoBehaviour
 
         //Animator Setup
         animator.SetFloat("Velocity", GetCurrentSpeed());
+        animator.SetBool("isCrouching", IsCrouching());
 
         //Move character controller
         characterController.Move(finalVelocity * Time.deltaTime);
@@ -161,10 +168,10 @@ public class Player_Behaviour : MonoBehaviour
 
     private void HandleJump()
     {
-        //Applt gravity direction
-        direction.y = -1f;
-
         animator.SetBool("Grounded", characterController.isGrounded);
+
+        //Apply gravity
+        lastDirection.y = -1f;
 
         //Jump behaviour with gravity
         if (characterController.isGrounded)
@@ -190,6 +197,7 @@ public class Player_Behaviour : MonoBehaviour
                 else if (isCrouching)
                 {
                     //Back Jump
+                    animator.SetTrigger("BackJump");
                     backJump = true;
                     isCrouching = false;
                     finalVelocity.y = backJumpForce;
@@ -206,12 +214,27 @@ public class Player_Behaviour : MonoBehaviour
             else
             {
                 backJump = false;
-                finalVelocity.y = direction.y * gravity * Time.deltaTime; 
+                wallJump = false;
+                finalVelocity.y = lastDirection.y * gravity * Time.deltaTime; 
             }
         }
         else
         {
-            finalVelocity.y += direction.y * gravity * Time.deltaTime;
+            if (Input_Manager._INPUT_MANAGER.GetJumpButtonPressed())
+            {
+                if(wallJumpTimer > 0.1f && wallJump)
+                {
+                    //WallJump
+                    updateInputs = false;  //Terrorist Act
+                    finalVelocity.y = wallSpeed;
+                    lastDirection = Quaternion.Euler(45, 0, 0) * wallNormal;
+                }
+            }
+            else
+            {
+                finalVelocity.y += lastDirection.y * gravity * Time.deltaTime;
+            }
+            
         }
 
         //Handle Jump Timers
@@ -223,6 +246,10 @@ public class Player_Behaviour : MonoBehaviour
         {
             doubleJumpTimer -= Time.deltaTime;
         }
+        if (wallJump)
+        {
+            wallJumpTimer -= Time.deltaTime;
+        }
         if (jumpTimer < 0f)
         {
             jump = false;
@@ -231,16 +258,21 @@ public class Player_Behaviour : MonoBehaviour
         {
             doubleJump = false;
         }
+        if (wallJumpTimer < 0f)
+        {
+            wallJump = false;
+            updateInputs = true;
+        }
     }
 
     private void HandleRotation()
     {
         //Roatate character relative to the forward of the camera
         float rotation = Vector3.SignedAngle(direction, -transform.forward, transform.up);
-        Debug.Log(rotation);
+
         if(direction != transform.forward /*&& rotation > rotationThreshold*/)
         {
-            transform.Rotate(Vector3.up * rotation * Time.deltaTime);
+          transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -285,6 +317,7 @@ public class Player_Behaviour : MonoBehaviour
 
     private void AchievePoint()
     {
+        //Asign random audioClip when achieving a point
         int index = Random.Range(0, 4);
         audioSource.clip = achieveAudios[index];
         audioSource.Play();
@@ -294,29 +327,44 @@ public class Player_Behaviour : MonoBehaviour
         //Wall Elements
         if (!characterController.isGrounded && hit.gameObject.CompareTag("Wall"))
         {
-            wallJump = true;
+            wall = hit.gameObject;
             wallNormal = hit.normal;
+            wallJump = true;
+            wallJumpTimer = maxWallJumpTime;
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        if(wall != null)
+        {
+            Gizmos.DrawRay(wall.transform.position, Quaternion.Euler(45, 0, 0) * wallNormal);
         }
     }
 
-    //Geters for Animator Manager
-    public float GetCurrentSpeed()
+    //Geters for Animator Manager (scraped for final build) converted to private
+    private float GetCurrentSpeed()
     {
         return speed;
     }
 
-    public bool GetJump()
+    private bool GetJump()
     {
         return jump;
     }
 
-    public bool GetDoubleJump()
+    private bool GetDoubleJump()
     {
         return jumpTimer > 0.1f && jump == true;
     }
 
-    public bool GetTripleJump()
+    private bool GetTripleJump()
     {
         return doubleJumpTimer > 0.1f && doubleJump == true;
+    }
+
+    private bool IsCrouching()
+    {
+        return isCrouching;
     }
 }

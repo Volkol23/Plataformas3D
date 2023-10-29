@@ -27,6 +27,13 @@ public class Game_Manager : MonoBehaviour
         }
     }
 
+    private void AllPoints()
+    {
+        //Asign the max points of the scene
+        GameObject[] points = GameObject.FindGameObjectsWithTag("Coin");
+        totalPoints = points.Length;
+    }
+
     public void ResetGame()
     {
         //Reset Main Scene
@@ -36,20 +43,22 @@ public class Game_Manager : MonoBehaviour
 
     public void UpdatePoints()
     {
+        //Add points
         points++;
     }
 
+    //Variable Getters
     public int GetPoints()
     {
         return points;
     }
 
-    private void AllPoints()
+    public int GetMaxPoints()
     {
-        GameObject[] points = GameObject.FindGameObjectsWithTag("Coin");
-        totalPoints = points.Length;
+        return totalPoints;
     }
 
+    //Win Game
     public bool WinGame()
     {
         return points == totalPoints && totalPoints > 0;

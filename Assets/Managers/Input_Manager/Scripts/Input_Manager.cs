@@ -10,12 +10,12 @@ public class Input_Manager : MonoBehaviour
     private PlayerInputActions playerInputs;
 
     private float timeSinceJumpPressed = 0f;
-    private float timeSinceCrouchPressed = 0f;
 
     private Vector2 leftAxisValue = Vector2.zero;
     private Vector2 rightAxisValue = Vector2.zero;
 
     private bool resetValue = false;
+    private bool crouchValue = false;
     private bool batButton = false;
 
     private void Awake()
@@ -47,7 +47,6 @@ public class Input_Manager : MonoBehaviour
     void Update()
     {
         timeSinceJumpPressed += Time.deltaTime;
-        timeSinceCrouchPressed += Time.deltaTime;
         InputSystem.Update();
     }
 
@@ -78,7 +77,7 @@ public class Input_Manager : MonoBehaviour
     //Check if Crouch Button is Pressed
     private void CrouchButtonHold(InputAction.CallbackContext context)
     {
-        timeSinceCrouchPressed = 0f;
+        crouchValue = !crouchValue;
     }
 
     //Check if Bat Button is Pressed
@@ -110,7 +109,7 @@ public class Input_Manager : MonoBehaviour
 
     public bool GetCrouchButtonPressed()
     {
-        return timeSinceCrouchPressed == 0f;
+        return crouchValue;
     }
 
     public bool GetBatButtonPressed()

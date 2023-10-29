@@ -15,19 +15,20 @@ public class Animator_Player_Manager : MonoBehaviour
 
     private void Update()
     {
-        animator.SetFloat("Velocity", playerBehaviour.GetCurrentSpeed());
+        //Scrap For final build
+        //animator.SetFloat("Velocity", playerBehaviour.GetCurrentSpeed());
 
-        if (playerBehaviour.GetTripleJump())
-        {
-            animator.SetTrigger("Triple Jump");
-        } 
-        else if (playerBehaviour.GetDoubleJump())
-        {
-            animator.SetTrigger("Double Jump");
-        }
-        else if(playerBehaviour.GetJump())
-        {
-            animator.SetTrigger("Jump");
-        }
+        //if (playerBehaviour.GetTripleJump())
+        //{
+        //    animator.SetTrigger("Triple Jump");
+        //} 
+        //else if (playerBehaviour.GetDoubleJump())
+        //{
+        //    animator.SetTrigger("Double Jump");
+        //}
+        //else if(playerBehaviour.GetJump())
+        //{
+        //    animator.SetTrigger("Jump");
+        //}
     }
 }

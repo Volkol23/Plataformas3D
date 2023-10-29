@@ -61,7 +61,7 @@ Transform:
   m_Children:
   - {fileID: 8195668228555195367}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2021515874380696424
 GameObject:
@@ -180,9 +180,6 @@ PrefabInstance:
       addedObject: {fileID: 4525786994392760597}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4381544025470208873}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7108185128548622950}
   m_SourcePrefab: {fileID: 100100000, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
 --- !u!4 &8195668228555195367 stripped
@@ -239,14 +236,17 @@ MonoBehaviour:
   acceleration: 5
   deacceleration: 50
   isCrouching: 0
-  rotationSpeed: 10
-  gravity: 20
+  rotationSpeed: 1.5
+  rotationThreshold: 0.1
+  gravity: -20
   jumpForce: 10
   doubleJumpForce: 13
   tripleJumpForce: 20
   backJumpForce: 20
   backJumpSpeed: 7
   maxTimeJump: 2.5
+  wallSpeed: 15
+  maxWallJumpTime: 0.5
   bounceDirection: {x: 0, y: 1, z: 0}
   bounceForce: 20
   batForce: 30
@@ -257,18 +257,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 27c3ed1b81c866b4695715b4a94b3411, type: 3}
   - {fileID: 8300000, guid: d36c896c9ceeb424fa05dd58005c329e, type: 3}
   - {fileID: 8300000, guid: 04576525077b999418c5ed34f9b563d2, type: 3}
---- !u!114 &4381544025470208873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8860564502640105821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c48018352f5e2749bc8ca029bb1d33c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &7108185128548622950
 AudioSource:
   m_ObjectHideFlags: 0

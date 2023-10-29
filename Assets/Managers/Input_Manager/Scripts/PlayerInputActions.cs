@@ -69,8 +69,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""id"": ""21e2c136-d268-4960-9e9e-9948a43b94c8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": true
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Bat"",
@@ -196,7 +196,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""700de2d8-8a13-431e-a30c-be26bdc14b1a"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
