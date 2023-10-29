@@ -112,7 +112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.522
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d0c8f5d652096240b4bf965147e3794, type: 3}
       propertyPath: m_LocalPosition.z
@@ -236,9 +236,9 @@ MonoBehaviour:
   acceleration: 5
   deacceleration: 50
   isCrouching: 0
-  rotationSpeed: 1.5
+  rotationSpeed: 2
   rotationThreshold: 0.1
-  gravity: -20
+  gravity: 20
   jumpForce: 10
   doubleJumpForce: 13
   tripleJumpForce: 20
@@ -246,9 +246,9 @@ MonoBehaviour:
   backJumpSpeed: 7
   maxTimeJump: 2.5
   wallSpeed: 15
-  maxWallJumpTime: 0.5
-  bounceDirection: {x: 0, y: 1, z: 0}
-  bounceForce: 20
+  maxWallJumpTime: 0.7
+  bounceDirection: {x: 0, y: 0.7, z: 0.7}
+  bounceForce: 35
   batForce: 30
   batCappy: {fileID: 4266176866651142554, guid: 0fe51b99fe0a3244495663cbfd9183a6, type: 3}
   batSpawner: {fileID: 2021515874380696424}

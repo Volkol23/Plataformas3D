@@ -25273,34 +25273,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: gravity
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: wallSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: bounceForce
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: rotationSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: maxWallJumpTime
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: bounceDirection.y
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4525786994392760597, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: bounceDirection.z
-      value: 0.7
-      objectReference: {fileID: 0}
     - target: {fileID: 6220608366340483862, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -25344,10 +25316,6 @@ PrefabInstance:
     - target: {fileID: 6220608366340483862, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8195668228555195367, guid: f083f38d7dd58434ba5f17bb433d1e1d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.522
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
